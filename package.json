@@ -1,0 +1,15 @@
+{
+  "name": "baseball-full-stack",
+  "version": "1.0.0",
+  "description": "A full stack application using MEN (Mongoose, Express, NodeJS). Application will allow CRUD operations and supply stats on each player and team entered into the database.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mongoose": "^8.7.1"
+  }
+}
