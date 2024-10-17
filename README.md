@@ -15,6 +15,18 @@ READ: There will be a dashboard that will display all necessary aspects of the a
 UPDATE: The user will be able to update the players information and ballpark on the team they manage.
 DELETE: The user will be able to delete players, ballpark and even their account all together. 
 
+# User Stories
+
+User would like to be able to create an admin account to Create/Update their teams and players.
+User would like full CRUD option to work with their team data.
+User would like to be able to schedule their teams against other teams.
+User would like to see their teams, players and schedule on the front end.
+User would like to have a dashboard that allows them to gather all data they want with filtering avaliable. 
+
+# Stretch Goals
+Create a scoring engine to be able to do a full game.
+Create a fantasy scoring engine to give users their end reults of what points they gain from players action.
+
 # ERD
 
 ![application ERD](./images/Baseball-ERD.drawio.png)
