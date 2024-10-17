@@ -22,3 +22,7 @@ DELETE: The user will be able to delete players, ballpark and even their account
 # SAMPLE DATA CALL
 
 ![DataSample](./images/dataCall.png)
+
+# SITE WIREFRAME
+
+![Wireframe](./images/Baseball-App-Wireframe.drawio.png)
