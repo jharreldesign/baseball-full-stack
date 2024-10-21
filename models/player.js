@@ -10,7 +10,7 @@ const playerSchema = new Schema(
         hits: { type: String, required: true },
         hometown: { type: String, required: true},
         headshot: { type: String, required: true },
-        debut: { type: Number, required: true }, // Make sure debut is defined here
+        debut: { type: Number, required: true }, 
         // currentTeam: { type: Schema.Types.ObjectId, ref: 'Team' },
         // previousTeam: { type: Schema.Types.ObjectId, ref: 'Team' },
     },

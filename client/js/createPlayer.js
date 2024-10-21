@@ -35,3 +35,24 @@ document.getElementById('playerForm').addEventListener('submit', async (event) =
       document.getElementById('message').innerText = `Error: ${err.message}`;
     }
   });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const teamSelect = document.getElementById('team');
+  
+    // Fetch the team names from the backend
+    axios.get('http://localhost:3001/teams')
+      .then(response => {
+        const teams = response.data; 
+        console.log(response.data);
+        teams.forEach(team => {
+          const option = document.createElement('option');
+          option.value = team.teamName;
+          option.textContent = team.teamName;
+          teamSelect.appendChild(option);
+        });
+      })
+      .catch(error => {
+        console.error("There was an error fetching the teams!", error);
+      });
+  });
+  
