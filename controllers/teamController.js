@@ -4,6 +4,7 @@ const { Team } = require('../models')
 const getAllTeams = async (req, res) => {
   try {
     let team = await Team.find({})
+    console.log(team)
     res.json(team)
   } catch (error) {
     return res.status(500).send(error.message)
@@ -54,7 +55,7 @@ const updateTeam = async (req, res) => {
 const deleteTeam = async (req, res) => {
   try {
     let { id } = req.params
-    let deleted = await Course.findByIdAndDelete(id)
+    let deleted = await Team.findByIdAndDelete(id)
     if(deleted){
       return res.status(200).send('Team deleted')
     }

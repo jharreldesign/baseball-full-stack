@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script defer src="./js/createPlayer.js"></script>
+    <script defer src="./js/script.js"></script>
+
+    <link rel="stylesheet" href="./css/create-player.css">
+    <title>Player Creator</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Create A New Player</h1>
+        <form action="" id="playerForm" class="form">
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" name="first_name" required>
+
+            <label for="last_name">Last Name:</label>
+            <input type="text" id="last_name" name="last_name" required>
+
+            <label for="playerNumber">Number:</label>
+            <input type="number" id="playerNumber" name="playerNumber" required>
+
+            <label for="position">Position:</label>
+            <input type="text" id="position" name="position" required>
+
+            <label for="throws">Throws:</label>
+            <input type="text" id="throws" name="throws" required>
+
+            <label for="hits">Hits:</label>
+            <input type="text" id="hits" name="hits" required>
+
+            <label for="hometown">Hometown:</label>
+            <input type="text" id="hometown" name="hometown" required>
+
+            <label for="headshot">Headshot:</label>
+            <input type="text" id="headshot" name="headshot" required>
+
+            <label for="debut">Debut:</label>
+            <input type="number" id="debut" name="debut" required>
+
+            <input type="submit" value="Create Player">
+        </form>
+
+        <p id="message"></p>
+    </div>
+</body>
+</html>
