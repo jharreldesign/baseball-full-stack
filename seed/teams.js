@@ -16,45 +16,9 @@ const main = async () => {
             teamName: "Cubs",
             teamInitials: "CHC",
             ballpark: "Wrigley Field",
-            league: "National League",
-            division: "Central"
+            city: "Chicago",
         },
-        {
-            teamName: "Mariners",
-            teamInitials: "SEA",
-            ballpark: "T-Mobile Park",
-            league: "American League",
-            division: "West"
-        },
-        {
-            teamName: "Cardinals",
-            teamInitials: "STL",
-            ballpark: "Bush Stadium",
-            league: "National League",
-            division: "Central"
-        },
-        {
-            teamName: "Yankees",
-            teamInitials: "NYY",
-            ballpark: "Yankee Stadium",
-            league: "American League",
-            division: "East"
-        },
-        {
-            teamName: "Orioles",
-            teamInitials: "BAL",
-            ballpark: "Oriole Park at Camden Yards",
-            league: "American League",
-            division: "Eastern"
-        },
-        {
-            teamName: "Padres",
-            teamInitials: "PAD",
-            ballpark: "Petco Park",
-            league: "National League",
-            division: "West"
-        },
-
+       
     ]
 
     await Team.insertMany(teams);

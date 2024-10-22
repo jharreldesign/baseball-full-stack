@@ -1,53 +1,43 @@
+const Ballpark = require("../models/ballpark")
 
-const { Ballpark } = require('../models')
-
+// get all users
 const getAllBallparks = async (req, res) => {
+  const users = await Ballpark.find()
+  res.json(users)
+}
+
+// get single user by id
+const getBallparkById = async (req, res) => {
+  const ballpark = await Ballpark.findById(req.params.id)
+  res.json(ballpark)
+}
+
+// get user by name
+const getBallparkByName = async (req, res) => {
   try {
-    let ballpark = await Ballpark.find({})
+    const { teamName } = req.params
+    const ballpark = await Ballpark.find({ name: teamName })
+    if (!ballpark) {
+      return res
+        .status(404)
+        .json({ message: "User not found! Get the search dogs." })
+    }
     res.json(ballpark)
   } catch (error) {
-    return res.status(500).send(error.message)
+    res.status(500).json({ message: error.message })
   }
 }
 
-const getBallparkById = async (req, res) => {
-  try {
-    let { id } = req.params
-    let ballpark = await Ballpark.findById(id)
-    if (ballpark) {
-      return res.json(ballpark)
-    }
-    return res.status(400).send('Ballpark with the specified ID does not exist')
-  } catch (error) {
-    if (error.name === 'CastError' && error.kind === 'ObjectId') {
-      return res.status(404).send('That ballpark does not exist!')
-    }
-    return res.status(500).send(error.message)
-  }
-}
-
+// create ballpark
 const createBallpark = async (req, res) => {
   try {
-    let ballpark = await new Ballpark(req.body)
+    const ballpark = await new Ballpark(req.body)
     await ballpark.save()
     return res.status(201).json({
-      ballpark
+      ballpark,
     })
   } catch (error) {
     return res.status(500).json({ error: error.message })
-  }
-}
-
-const updateBallpark = async (req, res) => {
-  try {
-    let { id } = req.params
-    let updated = await Ballpark.findByIdAndUpdate(id, req.body, { new: true })
-    if (updated) {
-      return res.status(200).json(updated)
-    }
-    throw new Error('Ballpark not Found, sorry.')
-  } catch (error) {
-    return res.status(500).send(error.message)
   }
 }
 
@@ -56,7 +46,7 @@ const deleteBallpark = async (req, res) => {
     let { id } = req.params
     let deleted = await Ballpark.findByIdAndDelete(id)
     if(deleted){
-      return res.status(200).send('Ballpark deleted')
+      return res.status(200).send('Player deleted')
     }
     throw new Error('Ballpark not Found, sorry')
   } catch (error) {
@@ -65,9 +55,9 @@ const deleteBallpark = async (req, res) => {
 }
 
 module.exports = {
+  getBallparkByName,
   getAllBallparks,
   getBallparkById,
   createBallpark,
-  updateBallpark,
   deleteBallpark
 }

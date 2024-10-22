@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const { Schema } = require ('mongoose');
 
 const ballparkSchema = new Schema(
@@ -18,4 +19,6 @@ const ballparkSchema = new Schema(
     { timestamps: true }
 )
 
-module.exports = ballparkSchema;
+const Ballpark = mongoose.model("Ballpark", ballparkSchema)
+
+module.exports = Ballpark;
