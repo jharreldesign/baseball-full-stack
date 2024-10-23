@@ -1,31 +1,27 @@
-//CREATE TEAM
+const handleTeamFormSubmit = async (event) => {
+  event.preventDefault(); 
 
-document.getElementById('teamForm').addEventListener('submit', async (event) => {
-    event.preventDefault(); // Prevent form from refreshing the page
-    
-    const teamName = document.getElementById('teamName').value;
-    const teamInitials = document.getElementById('teamInitials').value;
-    const ballpark = document.getElementById('ballpark').value;
-  
-    const team = { teamName, teamInitials, ballpark };
-  
-    try {
-      const response = await fetch('http://localhost:3001/teams', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(team)
-      });
-  
-      if (response.ok) {
-        const result = await response.json();
-        document.getElementById('message').innerText = `Team created successfully: ${result.teamName}`;
-      } else {
-        const error = await response.text();
-        document.getElementById('message').innerText = `Error: ${error}`;
-      }
-    } catch (err) {
-      document.getElementById('message').innerText = `Error: ${err.message}`;
-    }
-  });
+  const teamData = {
+    teamName: document.getElementById('teamName').value,
+    city: document.getElementById('city').value,
+    state: document.getElementById('state').value,
+    teamInitials: document.getElementById('teamInitials').value,
+    ballpark: document.getElementById('ballpark').value,
+    teamLogo: document.getElementById('teamLogo').value,
+    ballparkImage: document.getElementById('ballparkImage').value
+  };
+
+  try {
+    const response = await axios.post('http://localhost:3001/teams', teamData);
+    document.getElementById('message').textContent = 'Team created successfully!'; 
+    document.getElementById('teamForm').reset(); 
+  } catch (error) {
+    console.error('Error creating team:', error);
+    document.getElementById('message').textContent = 'Error creating team: ' + error.message; 
+  }
+};
+
+window.onload = () => {
+  const teamForm = document.getElementById('teamForm');
+  teamForm.addEventListener('submit', handleTeamFormSubmit);
+};

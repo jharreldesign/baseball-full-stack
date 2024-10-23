@@ -1,56 +1,65 @@
-const Team = require("../models/team")
+const { Team, Ballpark } = require("../models");
 
-// get all teams
+// Get all teams
 const getAllTeams = async (req, res) => {
-  const teams = await Team.find()
-  res.json(teams)
+  try {
+    const teams = await Team.find().populate('ballpark'); 
+    res.json(teams);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 }
 
-// get single team by id
+// Get single team by ID
 const getTeamById = async (req, res) => {
-  const team = await Team.findById(req.params.id)
-  res.json(team)
+  try {
+    const team = await Team.findById(req.params.id).populate('ballpark'); 
+    if (!team) {
+      return res.status(404).json({ message: "Team not found!" });
+    }
+    res.json(team);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 }
 
-// get team by name
+// Get team by name
 const getTeamByName = async (req, res) => {
   try {
-    const { teamName } = req.params
-    const team = await Team.find({ name: teamName })
+    const { teamName } = req.params;
+    const team = await Team.findOne({ teamName }).populate('ballpark'); 
     if (!team) {
-      return res
-        .status(404)
-        .json({ message: "Team not found! Get the search dogs." })
+      return res.status(404).json({ message: "Team not found!" });
     }
-    res.json(team)
+    res.json(team);
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: error.message });
   }
 }
 
-// create team
 const createTeam = async (req, res) => {
+  console.log('Received request to create team:', req.body); 
   try {
-    const team = await new Team(req.body)
-    await team.save()
-    return res.status(201).json({
-      team,
-    })
+    const team = new Team(req.body);
+    await team.save();
+    return res.status(201).json(team);
   } catch (error) {
-    return res.status(500).json({ error: error.message })
+    console.error('Error creating team:', error); 
+    return res.status(500).json({ error: error.message });
   }
 }
 
+// Delete team
 const deleteTeam = async (req, res) => {
   try {
-    let { id } = req.params
-    let deleted = await Team.findByIdAndDelete(id)
-    if(deleted){
-      return res.status(200).send('Team deleted')
+    const { id } = req.params;
+    const deleted = await Team.findByIdAndDelete(id);
+    if (deleted) {
+      return res.status(200).send('Team deleted');
     }
-    throw new Error('Team not Found, sorry')
+    throw new Error('Team not found, sorry');
   } catch (error) {
-    return res.status(500).send(error.message)
+    return res.status(500).send(error.message);
   }
 }
 

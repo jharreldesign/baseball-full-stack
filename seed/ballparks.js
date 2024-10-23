@@ -1,37 +1,54 @@
 const db = require('../db');
-const { Ballpark } = require('../models')
+const { Ballpark, Team } = require('../models');
 
-db.on(`error`, console.error.bind(console, `MongoDB connection error:`))
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+const main = async () => {
+    const losAngelesAngels = await Team.findOne({ teamName: "Los Angeles Angels" });
+    const newYorkYankees = await Team.findOne({ teamName: "New York Yankees" });
+    
+    const ballparks = [
+        {
+            ballparkName: "Angel Stadium",
+            address: [
+                {
+                    street: "2000 E Gene Autry Way",
+                    city: "Anaheim",
+                    state: "CA",
+                    zip: 92806
+                }
+            ],
+            ballparkOpen: "1966",
+            capacity: 45017,
+            teamLogo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/Toronto_Blue_Jay_Primary_Logo.svg/1920px-Toronto_Blue_Jay_Primary_Logo.svg.png",
+            ballparkImg: "https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/Toronto_Blue_Jay_Primary_Logo.svg/1920px-Toronto_Blue_Jay_Primary_Logo.svg.png",
+            teams: [losAngelesAngels._id] 
+        },
+        // {
+        //     ballparkName: "Yankee Stadium",
+        //     address: [
+        //         {
+        //             street: "1 E 161st St",
+        //             city: "Bronx",
+        //             state: "NY",
+        //             zip: 10451
+        //         }
+        //     ],
+        //     ballparkOpen: "2009",
+        //     capacity: 54051,
+        //     ballparkImg: "https://example.com/images/yankee_stadium.jpg",
+        //     teams: [newYorkYankees._id] // Reference the ObjectId of the team
+        // }
+    ];
 
-const ballparks = [
-    //Central
-    {
-        ballparkName: "Wrigley Field",
-        address: [
-            {
-                street: "1060 W. Addison St.",
-                city: "Chicago",
-                state: "IL",
-                zip: 60613
-            }
-        ],
-        ballparkOpen: "April 20th, 1916",
-        capacity:  41649,
-        ballparkImg: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fs1.ticketm.net%2Fdam%2Fv%2F8cc%2F25cfd128-1b87-40a7-99da-bc6a955418cc_315362_SOURCE.jpg&f=1&nofb=1&ipt=4d196cb81a86b4dbc6c64d420266c6695e881f034414e51bcad4a72487d56e7c&ipo=images"
-    },
-]
+    await Ballpark.insertMany(ballparks);
+    console.log('Created ballparks!');
+    console.log(ballparks);
+};
 
 const run = async () => {
-    try {
-        await Ballpark.deleteMany();
-        await Ballpark.insertMany(ballparks);
-        console.log("Ballpark Created")
-    } catch (error) {
-        console.error("Error seeding ballpark:", error)
-    } finally {
-        db.close();
-    }
-}
+    await main();
+    db.close();
+};
 
 run();

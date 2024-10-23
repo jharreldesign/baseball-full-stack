@@ -1,8 +1,5 @@
-//CREATE USER
-// app.js
-
 document.getElementById('userForm').addEventListener('submit', async (event) => {
-    event.preventDefault(); // Prevent form from refreshing the page
+    event.preventDefault();
     
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;

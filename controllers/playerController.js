@@ -1,8 +1,8 @@
-const { Player } = require('../models')
+const { Player } = require('../models');
 
 const getAllPlayers = async (req, res) => {
   try {
-    let players = await Player.find({}).populate("currentTeam"); // Populate currentTeam
+    let players = await Player.find({}).populate("currentTeam");
     res.json(players);
   } catch (error) {
     return res.status(500).send(error.message);
@@ -12,7 +12,7 @@ const getAllPlayers = async (req, res) => {
 const getPlayerById = async (req, res) => {
   try {
     let { id } = req.params;
-    let player = await Player.findById(id).populate("currentTeam"); // Populate currentTeam
+    let player = await Player.findById(id).populate("currentTeam");
     if (player) {
       return res.json({
         firstName: player.firstName,
@@ -25,8 +25,9 @@ const getPlayerById = async (req, res) => {
         state: player.state,
         headshot: player.headshot,
         debut: player.debut,
+        actionPhoto: player.actionPhoto,
         currentTeam: {
-          _id: player.currentTeam._id, // or player.currentTeam.id if you want to avoid the mongoose wrapper
+          _id: player.currentTeam._id, 
           teamName: player.currentTeam.teamName,
           city: player.currentTeam.city,
           state: player.currentTeam.state,
@@ -44,13 +45,13 @@ const getPlayerById = async (req, res) => {
 }
 
 const createPlayer = async (req, res) => {
+  console.log('Received request to create player:', req.body); 
   try {
-    let player = await new Player(req.body);
+    const player = new Player(req.body);
     await player.save();
-    return res.status(201).json({
-      player
-    });
+    return res.status(201).json(player);
   } catch (error) {
+    console.error('Error creating player:', error); 
     return res.status(500).json({ error: error.message });
   }
 }
@@ -58,7 +59,7 @@ const createPlayer = async (req, res) => {
 const updatePlayer = async (req, res) => {
   try {
     let { id } = req.params;
-    let updated = await Player.findByIdAndUpdate(id, req.body, { new: true }).populate("currentTeam"); // Populate currentTeam
+    let updated = await Player.findByIdAndUpdate(id, req.body, { new: true }).populate("currentTeam");
     if (updated) {
       return res.status(200).json(updated);
     }

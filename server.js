@@ -16,24 +16,25 @@ app.get("/", (req, res) => {
   res.send("This is a Baseball Root");
 });
 
-//index routes
+// Index routes
 app.get("/teams", teamController.getAllTeams);
 app.get("/players", playerController.getAllPlayers);
-app.get("/ballpark", ballparkController.getAllBallparks);
+app.get("/ballparks", ballparkController.getAllBallparks);
 
-// crud routes
-app.post("/teams", teamController.createTeam)
-app.post("/players", playerController.createPlayer)
-app.post("/ballparks", ballparkController.createBallpark)
+app.get("/teams/name/:teamName", teamController.getTeamByName);
 
-app.delete("/teams/:id", teamController.deleteTeam)
-app.delete("/players/:id", playerController.deletePlayer)
-app.delete("/ballparks/:id", ballparkController.deleteBallpark)
+// CRUD routes
+app.post("/teams", teamController.createTeam);
+app.post("/players", playerController.createPlayer);
+app.post("/ballparks", ballparkController.createBallpark);
 
-app.get("/ballparks/:id", ballparkController.getBallparkByName)
-app.get("/players/:id", playerController.getPlayerById)
-app.get("/ballparks/:id", playerController.getPlayerById)
-app.get("/teams/:id", teamController.getTeamById)
+app.delete("/teams/:id", teamController.deleteTeam);
+app.delete("/players/:id", playerController.deletePlayer);
+app.delete("/ballparks/:id", ballparkController.deleteBallpark);
+
+app.get("/teams/:id", teamController.getTeamById);
+app.get("/ballparks/:id", ballparkController.getBallparkByName);
+app.get("/players/:id", playerController.getPlayerById);
 
 app.listen(PORT, () => {
   console.log(`Express server listening on port ${PORT}`)

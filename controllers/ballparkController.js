@@ -1,58 +1,82 @@
-const Ballpark = require("../models/ballpark")
+const Ballpark = require("../models/ballpark");
 
-// get all users
+// Get all ballparks with team info
 const getAllBallparks = async (req, res) => {
-  const users = await Ballpark.find()
-  res.json(users)
-}
+  try {
+    // Populate the teams field to show team names
+    const ballparks = await Ballpark.find().populate('teams', 'teamName'); 
+    res.json(ballparks);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
 
-// get single user by id
+// Get a single ballpark by ID
 const getBallparkById = async (req, res) => {
-  const ballpark = await Ballpark.findById(req.params.id)
-  res.json(ballpark)
-}
+  try {
+    const ballpark = await Ballpark.findById(req.params.id).populate('teams', 'teamName'); 
+    if (!ballpark) {
+      return res.status(404).json({ message: "Ballpark not found" });
+    }
+    res.json(ballpark);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
 
-// get user by name
+// Get ballpark by name
 const getBallparkByName = async (req, res) => {
   try {
-    const { teamName } = req.params
-    const ballpark = await Ballpark.find({ name: teamName })
+    const { ballparkName } = req.params; 
+    const ballpark = await Ballpark.findOne({ ballparkName }).populate('teams', 'teamName'); 
     if (!ballpark) {
-      return res
-        .status(404)
-        .json({ message: "User not found! Get the search dogs." })
+      return res.status(404).json({ message: "Ballpark not found" });
     }
-    res.json(ballpark)
+    res.json(ballpark);
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    return res.status(500).json({ message: error.message });
   }
-}
+};
 
-// create ballpark
+// Create a new ballpark
 const createBallpark = async (req, res) => {
   try {
-    const ballpark = await new Ballpark(req.body)
-    await ballpark.save()
-    return res.status(201).json({
-      ballpark,
-    })
-  } catch (error) {
-    return res.status(500).json({ error: error.message })
-  }
-}
+    const { ballparkName, address, ballparkOpen, capacity, ballparkImg, teams, teamLogo } = req.body;
 
+    if (!ballparkName || !address || !capacity || !teamLogo || !ballparkImg) {
+      return res.status(400).json({ message: "Please provide all required fields: ballparkName, address, team logo, ballpark image and capacity." });
+    }
+
+    const ballpark = new Ballpark({
+      ballparkName,
+      address,
+      ballparkOpen,
+      capacity,
+      ballparkImg,
+      teamLogo,
+      teams 
+    });
+
+    await ballpark.save();
+    return res.status(201).json(ballpark);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+// Delete a ballpark
 const deleteBallpark = async (req, res) => {
   try {
-    let { id } = req.params
-    let deleted = await Ballpark.findByIdAndDelete(id)
-    if(deleted){
-      return res.status(200).send('Player deleted')
+    const { id } = req.params;
+    const deleted = await Ballpark.findByIdAndDelete(id);
+    if (deleted) {
+      return res.status(200).send("Ballpark deleted");
     }
-    throw new Error('Ballpark not Found, sorry')
+    return res.status(404).send("Ballpark not found");
   } catch (error) {
-    return res.status(500).send(error.message)
+    return res.status(500).send(error.message);
   }
-}
+};
 
 module.exports = {
   getBallparkByName,
@@ -60,4 +84,4 @@ module.exports = {
   getBallparkById,
   createBallpark,
   deleteBallpark
-}
+};
