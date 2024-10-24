@@ -1,6 +1,5 @@
 const { Team, Ballpark } = require("../models");
 
-// Get all teams
 const getAllTeams = async (req, res) => {
   try {
     const teams = await Team.find().populate('ballpark'); 
@@ -8,9 +7,8 @@ const getAllTeams = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
+};
 
-// Get single team by ID
 const getTeamById = async (req, res) => {
   try {
     const team = await Team.findById(req.params.id).populate('ballpark'); 
@@ -21,9 +19,8 @@ const getTeamById = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
+};
 
-// Get team by name
 const getTeamByName = async (req, res) => {
   try {
     const { teamName } = req.params;
@@ -35,21 +32,30 @@ const getTeamByName = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
+};
 
 const createTeam = async (req, res) => {
   console.log('Received request to create team:', req.body); 
   try {
-    const team = new Team(req.body);
-    await team.save();
+    const { ballparkId, ...teamData } = req.body;  
+
+    if (ballparkId) {
+      const ballpark = await Ballpark.findById(ballparkId);
+      if (!ballpark) {
+        return res.status(404).json({ message: "Ballpark not found!" });
+      }
+      teamData.ballpark = ballpark._id; 
+    }
+
+    const team = new Team(teamData); 
+    await team.save();  
     return res.status(201).json(team);
   } catch (error) {
     console.error('Error creating team:', error); 
     return res.status(500).json({ error: error.message });
   }
-}
+};
 
-// Delete team
 const deleteTeam = async (req, res) => {
   try {
     const { id } = req.params;
@@ -61,7 +67,7 @@ const deleteTeam = async (req, res) => {
   } catch (error) {
     return res.status(500).send(error.message);
   }
-}
+};
 
 module.exports = {
   getTeamByName,
@@ -69,4 +75,4 @@ module.exports = {
   getTeamById,
   createTeam,
   deleteTeam
-}
+};

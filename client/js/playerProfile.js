@@ -22,7 +22,6 @@ const fetchPlayerProfile = async () => {
             document.getElementById('throws').textContent = `Throws: ${player.throws || 'N/A'}`; 
             document.getElementById('debut').textContent = `Debut: ${player.debut || 'N/A'}`; 
             
-            // Populate career stats
             const careerStatsBody = document.getElementById('careerStatsBody');
             careerStatsBody.innerHTML = ''; 
             player.careerStats.forEach(stat => {
@@ -36,7 +35,6 @@ const fetchPlayerProfile = async () => {
                 careerStatsBody.innerHTML += row;
             });
 
-            // Populate recent performance
             const recentPerformanceBody = document.getElementById('recentPerformanceBody');
             recentPerformanceBody.innerHTML = ''; 
             player.recentPerformance.forEach(performance => {

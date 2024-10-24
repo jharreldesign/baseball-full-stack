@@ -1,4 +1,3 @@
-// Function to fetch teams and populate the dropdown
 const fetchTeams = async () => {
   try {
       const response = await axios.get('http://localhost:3001/teams'); 
@@ -8,7 +7,6 @@ const fetchTeams = async () => {
       
       teamSelect.innerHTML = '<option value="">Select a team</option>';
       
-      // Populate the teams dropdown
       teams.forEach(team => {
           const option = document.createElement('option');
           option.value = team._id; 

@@ -1,7 +1,5 @@
-//CREATE TEAM
-
 document.getElementById('scheduleForm').addEventListener('submit', async (event) => {
-    event.preventDefault(); // Prevent form from refreshing the page
+    event.preventDefault(); 
     
     const gameDate = document.getElementById('gameDate').value;
     const homeTeam = document.getElementById('homeTeam').value;

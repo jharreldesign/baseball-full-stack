@@ -1,145 +1,89 @@
-const baseURL = "http://localhost:3001";
-
-// Function to render teams
-const renderTeams = (teams) => {
-  const teamsContainer = document.getElementById("teamsContainer");
-  if (teamsContainer) {
-    teamsContainer.innerHTML = `
-            <h2>Teams List</h2>
-            <ul>
-                ${teams
-                  .map((team) => {
-                    let ballparkName;
-                    if (team.ballpark && team.ballpark.ballparkName) {
-                      ballparkName = team.ballpark.ballparkName;
-                    } else {
-                      ballparkName = "unknown ballpark";
-                    }
-                    return `
-                    <li>
-                        ${team.teamName} | 
-                        ${team.teamInitials} | 
-                        ${team.ballpark} | 
-                    </li>`;
-                  })
-                  .join("")}
-            </ul>
-        `;
-  }
-};
-
-// Function to fetch all teams
-const getTeams = async () => {
+const fetchTeams = async () => {
   try {
-    const response = await axios.get(`${baseURL}/teams`);
-    console.log("Teams: ", response.data);
+    const response = await axios.get('http://localhost:3001/teams');
+    const teams = response.data;
 
-    renderTeams(response.data);
+    const teamsContainer = document.getElementById('teamsContainer');
+    teamsContainer.innerHTML = '';
+
+    teams.forEach(team => {
+      const teamCardHTML = `
+        <a href="teamProfile.html?id=${team._id}" class="team-card">
+          <img src="${team.teamLogo}" alt="${team.teamName}" class="teamLogo" />
+          <div>
+            <h3>${team.city} ${team.teamName}</h3>
+          </div>
+        </a>
+      `;
+      teamsContainer.insertAdjacentHTML('beforeend', teamCardHTML);
+    });
   } catch (error) {
-    console.error("Error getting teams: ", error.message);
-    console.log("Full error details: ", error);
+    console.error('Error fetching teams:', error);
   }
 };
 
-// Function to render players
-const renderPlayers = (players) => {
-  const playersContainer = document.getElementById("playersContainer");
-  if (playersContainer) {
-    playersContainer.innerHTML = `
-    <h2>Players List</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>Name</th>
-            <th>Position</th>
-            <th>Hits/Throws</th>
-            <th>Hometown</th>
-            <th>Debut</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${players
-            .map(
-              (player, index) => `
-              <tr>
-              <td>${player.playerNumber || "Unknown Number"}</td>
-              <td>${player.first_name || "Unknown Player"} ${player.last_name || "Unknown Player"}</td>
-              <td>${player.position || "Unknown Player"}</td>
-              <td>Hits: ${player.hits || "Unknown hits"}/Throws: ${player.throws || "Unknown Throws"}</td>
-              <td>${player.hometown || "Unknown Hometown"}</td>
-              <td>${player.debut || "Unknown Debut"}</td>
-              </tr>
-            `
-            )
-            .join("")}
-        </tbody>
-      </table>
-    `;
-  }
-};
-
-// Function to fetch players
-const getPlayers = async () => {
+const fetchSchedules = async () => {
   try {
-    const response = await axios.get(`${baseURL}/players`);
-    console.log("Players: ", response.data);
+    const response = await axios.get('http://localhost:3001/schedules');
+    const schedules = response.data;
+    console.log(response.data);
 
-    renderPlayers(response.data);
+    const schedulesContainer = document.getElementById('schedulesContainer');
+    schedulesContainer.innerHTML = '';
+
+    schedules.forEach(schedule => {
+      const gameDate = new Date(schedule.gameDate).toLocaleString("en-US", {
+        weekday: "long", year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"
+      });
+
+      const scheduleCardHTML = `
+        <a href="scheduleProfile.html?id=${schedule._id}" class="schedule-card">
+          <img src="${schedule.homeTeam.teamLogo}" alt="${schedule.homeTeam.teamName}" class="teamLogo" />
+          <div class="game-info">
+            <h3>${schedule.homeTeam.teamName} vs ${schedule.awayTeam.teamName}</h3>
+            <h4>${gameDate}</h4>
+            <h5>Ballpark: ${schedule.ballpark || "Unknown"}</h5> <!-- Corrected this line -->
+          </div>
+          <img src="${schedule.awayTeam.teamLogo}" alt="${schedule.awayTeam.teamName}" class="teamLogo" />
+        </a>
+      `;
+      schedulesContainer.insertAdjacentHTML('beforeend', scheduleCardHTML);
+    });
   } catch (error) {
-    console.error("Error getting players: ", error.message);
-    console.log("Full error details: ", error);
+    console.error('Error fetching schedules:', error);
   }
 };
 
-// Function to render schedules as a table with alternating colored rows
-const renderSchedules = (schedules) => {
-  const schedulesContainer = document.getElementById("schedulesContainer");
-  if (schedulesContainer) {
-    schedulesContainer.innerHTML = `
-      <h2>Scheduled Games List</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Game Date</th>
-            <th>Home Team</th>
-            <th>Away Team</th>
-            <th>Ballpark</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${schedules
-            .map(
-              (schedule, index) => `
-              <tr>
-              <td>${schedule.gameDate || "Unknown Date"}</td>
-                <td>${schedule.homeTeam || "Unknown Home Team"}</td>
-                <td>${schedule.awayTeam || "Unknown Away Team"}</td>
-                <td>${schedule.ballpark || "Unknown Ballpark"}</td>
-              </tr>
-            `
-            )
-            .join("")}
-        </tbody>
-      </table>
-    `;
-  }
-};
 
-// Function to fetch scheduled games
-const getSchedule = async () => {
+const fetchPlayers = async () => {
   try {
-    const response = await axios.get(`http://localhost:3001/schedules`);
-    console.log("Scheduled games: ", response.data);
+    const response = await axios.get('http://localhost:3001/players');
+    const players = response.data;
+    console.log('Fetched players:', players);
 
-    renderSchedules(response.data);
+    const playersContainer = document.getElementById('playersContainer');
+    playersContainer.innerHTML = '';
+
+    players.forEach(player => {
+      const playerCardHTML = `
+        <a href="playerProfile.html?id=${player._id}" class="player-card">
+          <img src="${player.headshot}" alt="${player.firstName} ${player.lastName}" class="playerLogo" />
+          <div>
+            <h3>${player.firstName} ${player.lastName}</h3>
+            <p>Position: ${player.position || "Unknown"}</p>
+            <p>Team: ${player.currentTeam.teamName}</p>
+          </div>
+        </a>
+      `;
+      playersContainer.insertAdjacentHTML('beforeend', playerCardHTML);
+    });
   } catch (error) {
-    console.error("Error getting scheduled games: ", error.message);
-    console.log("Full error details: ", error);
+    console.error('Error fetching players:', error);
   }
 };
 
-// Call the functions to fetch and display data
-getTeams();
-getPlayers();
-getSchedule();
+window.onload = () => {
+  fetchTeams();
+  fetchSchedules();
+  fetchPlayers(); 
+};

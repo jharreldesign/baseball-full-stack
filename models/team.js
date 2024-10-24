@@ -6,8 +6,8 @@ const teamSchema = new mongoose.Schema({
     state: { type: String, required: true },
     teamInitials: { type: String, required: true },
     ballpark: { type: String, required: true },
-    teamLogo: { type: String, required: true },   // New field for team logo
-    ballparkImage: { type: String, required: true } // New field for ballpark image
+    teamLogo: { type: String, required: true }, 
+    ballparkImage: { type: String, required: true }
 });
 
 const Team = mongoose.model('Team', teamSchema);

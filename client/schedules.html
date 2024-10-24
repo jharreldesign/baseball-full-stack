@@ -3,12 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- JAVASCRIPT -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script defer src="./js/player.js"></script>
+    <script defer src="./js/schedule.js"></script>
+
+    <!-- CSS -->
     <link rel="stylesheet" href="./css/styles.css">
-    <link rel="stylesheet" href="./css/players.css">
     <link rel="stylesheet" href="./css/navbar.css">
-    <title>Players</title>
+    <link rel="stylesheet" href="./css/schedules.css">
+    
+    <title>Schedule</title>
 </head>
 <body>
   <header>
@@ -29,8 +34,12 @@
       </div>
     </nav>
   </header>
-    <section>
-        <div id="playersContainer"></div>
-    </section>
+  <section>
+    <div class="container">
+      <div id="schedulesContainer">
+      </div>
+      <p id="message"></p>
+    </div>
+  </section>
 </body>
 </html>

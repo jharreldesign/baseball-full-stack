@@ -1,9 +1,7 @@
 const Ballpark = require("../models/ballpark");
 
-// Get all ballparks with team info
 const getAllBallparks = async (req, res) => {
   try {
-    // Populate the teams field to show team names
     const ballparks = await Ballpark.find().populate('teams', 'teamName'); 
     res.json(ballparks);
   } catch (error) {
@@ -11,7 +9,6 @@ const getAllBallparks = async (req, res) => {
   }
 };
 
-// Get a single ballpark by ID
 const getBallparkById = async (req, res) => {
   try {
     const ballpark = await Ballpark.findById(req.params.id).populate('teams', 'teamName'); 
@@ -24,7 +21,6 @@ const getBallparkById = async (req, res) => {
   }
 };
 
-// Get ballpark by name
 const getBallparkByName = async (req, res) => {
   try {
     const { ballparkName } = req.params; 
@@ -38,7 +34,6 @@ const getBallparkByName = async (req, res) => {
   }
 };
 
-// Create a new ballpark
 const createBallpark = async (req, res) => {
   try {
     const { ballparkName, address, ballparkOpen, capacity, ballparkImg, teams, teamLogo } = req.body;
@@ -64,7 +59,6 @@ const createBallpark = async (req, res) => {
   }
 };
 
-// Delete a ballpark
 const deleteBallpark = async (req, res) => {
   try {
     const { id } = req.params;

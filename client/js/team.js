@@ -8,19 +8,19 @@ const fetchTeams = async () => {
         teamsContainer.innerHTML = '';
 
         teams.forEach(team => {
+            console.log(team);  
             const teamCardHTML = `
                 <a href="teamProfile.html?id=${team._id}" class="team-card">
                     <img src="${team.teamLogo}" alt="${team.teamName}" class="teamLogo" /> 
                     <div>
-                        <h3>${team.teamName}</h3>
-                        <p>City: ${team.city}</p>
-                        <p>Ballpark: ${team.ballpark.name}</p>
+                        <h3>${team.city} ${team.teamName}</h3>
+                        <p>Ballpark: ${team.ballpark}</p>
                     </div>
                 </a>
             `;
-
             teamsContainer.insertAdjacentHTML('beforeend', teamCardHTML);
         });
+        
     } catch (error) {
         console.error('Error fetching teams:', error);
     }
