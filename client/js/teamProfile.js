@@ -8,11 +8,10 @@ const fetchTeamProfileAndPlayers = async () => {
     }
 
     try {
-        // Fetch team profile
         const teamResponse = await axios.get(`http://localhost:3001/teams/${teamId}`);
         const team = teamResponse.data;
 
-        console.log('Fetched team:', team); 
+        console.log('Fetched team:', team);
         if (team) {
             updateTeamProfileUI(team);
 
@@ -22,7 +21,6 @@ const fetchTeamProfileAndPlayers = async () => {
             console.log('Fetched players:', players);
 
             const teamPlayers = players.filter(player => player.currentTeam && player.currentTeam._id === teamId);
-
             console.log('Filtered team players:', teamPlayers);
 
             populatePlayersTable(teamPlayers);
@@ -36,7 +34,7 @@ const fetchTeamProfileAndPlayers = async () => {
 
 const populatePlayersTable = (players) => {
     const playersTableBody = document.getElementById('playersTableBody');
-    playersTableBody.innerHTML = ''; 
+    playersTableBody.innerHTML = ''; // Clear existing content
 
     players.forEach(player => {
         const row = document.createElement('tr');
@@ -48,6 +46,10 @@ const populatePlayersTable = (players) => {
             <td>${player.bats || 'N/A'}</td>
             <td>${player.throws || 'N/A'}</td>
             <td>${player.playerNumber || 'N/A'}</td>
+            <td>
+                <button class="editPlayerButton" data-id="${player._id}">Edit</button>
+                <button class="deletePlayerButton" data-id="${player._id}">Delete</button>
+            </td>
         `;
 
         playersTableBody.appendChild(row);
@@ -62,5 +64,26 @@ const updateTeamProfileUI = (team) => {
     document.getElementById('teamLogo').src = `${team.teamLogo}` || ''; // Ensure logo is set correctly
     document.getElementById('ballparkImage').src = team.ballparkImage || 'path/to/default/ballpark.jpg';
 };
+
+document.getElementById('editTeamButton').addEventListener('click', () => {
+    alert('Edit team functionality to be implemented!');
+});
+
+document.getElementById('deleteTeamButton').addEventListener('click', async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const teamId = urlParams.get('id');
+
+    const confirmation = confirm('Are you sure you want to delete this team?');
+    if (confirmation) {
+        try {
+            await axios.delete(`http://localhost:3001/teams/${teamId}`);
+            alert('Team deleted successfully.');
+            window.location.href = './teams.html'; // Redirect after deletion
+        } catch (error) {
+            console.error('Error deleting team:', error);
+            alert('Failed to delete the team.');
+        }
+    }
+});
 
 fetchTeamProfileAndPlayers();

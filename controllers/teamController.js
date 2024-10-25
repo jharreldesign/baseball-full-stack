@@ -1,26 +1,25 @@
 const { Team, Ballpark } = require("../models");
 
 const getAllTeams = async (req, res) => {
-  try {
-    const teams = await Team.find().populate('ballpark'); 
-    res.json(teams);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+    try {
+        const teams = await Team.find().populate('ballpark');
+        res.json(teams);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };
 
 const getTeamById = async (req, res) => {
-  try {
-    const team = await Team.findById(req.params.id).populate('ballpark'); 
-    if (!team) {
-      return res.status(404).json({ message: "Team not found!" });
+    try {
+        const team = await Team.findById(req.params.id).populate('ballpark');
+        if (!team) {
+            return res.status(404).json({ message: 'Team not found' });
+        }
+        res.json(team);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-    res.json(team);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
 };
-
 const getTeamByName = async (req, res) => {
   try {
     const { teamName } = req.params;
