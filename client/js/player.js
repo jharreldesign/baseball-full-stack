@@ -7,7 +7,9 @@ const fetchPlayers = async () => {
         players.forEach(player => {
             console.log(player); 
             const playerCard = createPlayerCard(player); 
-            playersContainer.appendChild(playerCard); 
+            if (playerCard) {
+                playersContainer.appendChild(playerCard); 
+            }
         });
     } catch (error) {
         console.error('Error fetching players:', error);
@@ -24,7 +26,6 @@ const createPlayerCard = (player) => {
     const playerCard = document.createElement('div'); 
     playerCard.className = 'player-card'; 
 
-    
     if (!player._id) {
         console.error('Player ID is missing:', player);
         return; 
@@ -34,14 +35,13 @@ const createPlayerCard = (player) => {
         <a href="playerProfile.html?id=${player._id}" class="player-card-link">
             <img src="${player.headshot}" alt="${player.firstName} ${player.lastName}" />
             <h3>${player.firstName} ${player.lastName}</h3>
-            <p>Number: ${player.playerNumber}</p>
-            <p>Position: ${player.position}</p>
-            <p>Current Team: ${player.currentTeam.teamName}</p>
+            <p>Number: ${player.playerNumber || "N/A"}</p>
+            <p>Position: ${player.position || "Unknown"}</p>
+            <p>Current Team: ${player.currentTeam?.teamName || "Free Agent"}</p>
         </a>
     `;
 
     return playerCard; 
 };
-
 
 window.onload = fetchPlayers;

@@ -7,13 +7,11 @@ const fetchSchedules = async () => {
     schedulesContainer.innerHTML = ""; 
 
     if (schedules.length === 0) {
-      document.getElementById("message").textContent =
-        "No schedules available.";
+      document.getElementById("message").textContent = "No schedules available.";
       return;
     }
 
     schedules.forEach((schedule) => {
-
       const gameDate = new Date(schedule.gameDate).toLocaleString("en-US", {
         weekday: "long",
         year: "numeric",
@@ -23,20 +21,27 @@ const fetchSchedules = async () => {
         minute: "2-digit",
       });
 
+      // Check if homeTeam and awayTeam exist before accessing properties
+      const homeTeamLogo = schedule.homeTeam?.teamLogo || "default-home-logo.png";
+      const homeTeamName = schedule.homeTeam?.teamName || "Unknown Home Team";
+      const awayTeamLogo = schedule.awayTeam?.teamLogo || "default-away-logo.png";
+      const awayTeamName = schedule.awayTeam?.teamName || "Unknown Away Team";
+      const ballpark = schedule.ballpark || "Unknown Ballpark";
+
       const scheduleCardHTML = `
-      <a href="scheduleProfile.html?id=${schedule._id}" class="schedule-card">
+        <a href="scheduleProfile.html?id=${schedule._id}" class="schedule-card">
           <div>
-              <h3>
-                  <img src="${schedule.homeTeam.teamLogo}" alt="${schedule.homeTeam.teamName} Logo" class="teamLogo" />
-                  ${schedule.homeTeam.teamName} vs 
-                  ${schedule.awayTeam.teamName} 
-                  <img src="${schedule.awayTeam.teamLogo}" alt="${schedule.awayTeam.teamName} Logo" class="teamLogo" />
-              </h3>
-              <h4>${gameDate}</h4>
-              <h5>Ballpark: ${schedule.ballpark}</h5>
+            <h3>
+              <img src="${homeTeamLogo}" alt="${homeTeamName} Logo" class="teamLogo" />
+              ${homeTeamName} vs 
+              ${awayTeamName} 
+              <img src="${awayTeamLogo}" alt="${awayTeamName} Logo" class="teamLogo" />
+            </h3>
+            <h4>${gameDate}</h4>
+            <h5>Ballpark: ${ballpark}</h5>
           </div>
-      </a>
-  `;
+        </a>
+      `;
 
       schedulesContainer.insertAdjacentHTML("beforeend", scheduleCardHTML);
     });
@@ -50,31 +55,7 @@ const fetchSchedules = async () => {
   }
 };
 
-const fetchPlayers = async () => {
-  try {
-    const response = await axios.get('http://localhost:3001/players');
-    const players = response.data;
-    console.log('Fetched players:', players);
-
-    const playersContainer = document.getElementById('playersContainer');
-    playersContainer.innerHTML = '';
-
-    players.forEach(player => {
-      const playerCardHTML = `
-        <a href="playerProfile.html?id=${player._id}" class="player-card">
-          <img src="${player.headshot}" alt="${player.firstName} ${player.lastName}" class="playerLogo" />
-          <div>
-            <h3>${player.firstName} ${player.lastName}</h3>
-            <p>Position: ${player.position || "Unknown"}</p>
-            <p>Team: ${player.team?.teamName || "Free Agent"}</p>
-          </div>
-        </a>
-      `;
-      playersContainer.insertAdjacentHTML('beforeend', playerCardHTML);
-    });
-  } catch (error) {
-    console.error('Error fetching players:', error);
-  }
+// Fetch schedules and players on page load
+window.onload = () => {
+  fetchSchedules();
 };
-
-window.onload = fetchSchedules;
